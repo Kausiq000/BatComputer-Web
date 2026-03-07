@@ -7,9 +7,6 @@ import BatmanCanvas2 from "@/components/Batmancanvas2";
 import CustomCursor from "@/components/CustomCursor";
 import { cinematicArchives } from "@/lib/movieData";
 
-// Type definition for movie data
-type Movie = typeof cinematicArchives[0];
-
 export default function BatcomputerMainframe() {
   const [activeSchematic, setActiveSchematic] = useState<string | null>(null);
 
@@ -17,18 +14,6 @@ export default function BatcomputerMainframe() {
   const rightPanelRef = useRef<HTMLDivElement>(null);
   const centerPanelRef = useRef<HTMLDivElement>(null);
   
-  // Hardcoded Scanner Logs to eliminate state-trigger re-renders and glitching
-  const staticLogs = [
-    "[10:41] 10-31 Crime in Progress: Crime Alley",
-    "[10:42] Arkham Asylum cell block B secure",
-    "[10:45] Unidentified vigilante spotted near Clock Tower",
-    "[10:47] Signal intercepted: Joker toxin signature detected",
-    "[10:51] GCPD units dispatched to Iceberg Lounge",
-    "[10:55] WayneTech satellite repositioning...",
-    "[11:02] Thermal signatures matching League of Shadows",
-    "[11:04] Bat-Signal lit."
-  ];
-
   // GSAP Boot-Up Sequence
   useEffect(() => {
     const ctx = gsap.context(() => {

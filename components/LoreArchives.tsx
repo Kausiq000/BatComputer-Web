@@ -88,20 +88,16 @@ export default function LoreArchives() {
       {/* Right Panel (70% on Desktop, 50% on Mobile) */}
       <div className="w-full md:w-[70%] relative w-full h-full overflow-hidden bg-zinc-900 rounded-2xl">
         
-        {/* The OUTGOING Image */}
-        {/* @ts-ignore */}
         <img
           ref={oldImgRef}
-          src={prevEntry.image || (prevEntry as any).src}
+          src={prevEntry.image}
           alt={prevEntry.name}
           className="absolute inset-0 w-full h-full object-cover z-0 opacity-50"
         />
 
-        {/* The INCOMING Image */}
-        {/* @ts-ignore */}
         <img
           ref={newImgRef}
-          src={activeEntry.image || (activeEntry as any).src}
+          src={activeEntry.image}
           alt={activeEntry.name}
           className="absolute inset-0 w-full h-full object-cover z-0 opacity-50"
         />
@@ -113,8 +109,7 @@ export default function LoreArchives() {
             {activeEntry.classification}
           </h3>
           <p className="text-zinc-300 text-xl md:text-2xl leading-relaxed font-inter font-medium">
-            {/* @ts-ignore */}
-            {activeEntry.bio || (activeEntry as any).description}
+            {activeEntry.bio}
           </p>
           </div>
         </div>

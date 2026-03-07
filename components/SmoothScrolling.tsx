@@ -1,9 +1,8 @@
 "use client";
 
-import { ReactNode } from "react";
 import { ReactLenis } from "@studio-freight/react-lenis";
 
-export default function SmoothScrolling({ children }: { children: any }) {
+export default function SmoothScrolling({ children }: { children: React.ReactNode }) {
   return (
     <ReactLenis
       root
@@ -13,6 +12,7 @@ export default function SmoothScrolling({ children }: { children: any }) {
         smoothWheel: true,
       }}
     >
+      {/* @ts-expect-error - ReactLenis types may conflict with React 19 children types */}
       {children}
     </ReactLenis>
   );
