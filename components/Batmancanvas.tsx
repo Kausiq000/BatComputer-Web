@@ -26,8 +26,8 @@ export default function BatmanCanvas() {
         <div className="w-full h-screen absolute inset-0 z-0 pointer-events-none">
             <Canvas camera={{ position: [0, 0, 15], fov: 45 }}>
                 <Suspense fallback={
-                    <Html center>
-                        <div className="flex items-center justify-center text-yellow-500 text-2xl md:text-4xl font-black tracking-widest animate-pulse z-0 whitespace-nowrap" style={{ fontFamily: "var(--font-oswald)" }}>
+                    <Html center position={[1.5, 0, 0]}>
+                        <div className="flex items-center justify-center text-yellow-500 text-2xl md:text-3xl font-black tracking-widest animate-pulse z-0 whitespace-nowrap pl-10 md:pl-40" style={{ fontFamily: "var(--font-oswald)" }}>
                             BATCOMPUTER INITIATED...
                         </div>
                     </Html>

@@ -13,6 +13,7 @@ export default function BatcomputerMainframe() {
   const leftPanelRef = useRef<HTMLDivElement>(null);
   const rightPanelRef = useRef<HTMLDivElement>(null);
   const centerPanelRef = useRef<HTMLDivElement>(null);
+  const scannerLinesRef = useRef<(HTMLDivElement | null)[]>([]);
   
   // GSAP Boot-Up Sequence
   useEffect(() => {
@@ -20,27 +21,63 @@ export default function BatcomputerMainframe() {
       gsap.fromTo(leftPanelRef.current, { x: -300, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power4.out", delay: 0.2 });
       gsap.fromTo(rightPanelRef.current, { x: 300, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power4.out", delay: 0.4 });
       gsap.fromTo(centerPanelRef.current, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.5, ease: "power4.out", delay: 0.6 });
+      
+      // Live feed effect for GCPD scanner
+      gsap.fromTo(scannerLinesRef.current, 
+        { opacity: 0, x: -10 }, 
+        { opacity: 1, x: 0, duration: 0.5, stagger: 1.2, ease: "power2.out", delay: 1.5 }
+      );
     });
     return () => ctx.revert();
   }, []);
 
-  // Quirky GSAP Mouse Hover interactions on the cards
-  const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+  
+  const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>, originalText: string) => {
     gsap.to(e.currentTarget, { scale: 1.05, duration: 0.3, ease: "back.out(1.7)" });
+    
+    // Matrix style subtitle decryption effect
+    const titleElement = e.currentTarget.querySelector("h4");
+    if (titleElement) {
+      let iterations = 0;
+      const interval = setInterval(() => {
+        titleElement.innerText = originalText.split("")
+          .map((letter, index) => {
+            if (index < iterations) return originalText[index];
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join("");
+        if (iterations >= originalText.length) clearInterval(interval);
+        iterations += 1 / 3;
+      }, 30);
+    }
   };
   
   const handleMouseLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
     gsap.to(e.currentTarget, { scale: 1, duration: 0.3, ease: "power2.out" });
   };
 
+  const handleMouseMoveMain = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    e.currentTarget.style.setProperty("--mouse-x", `${x}px`);
+    e.currentTarget.style.setProperty("--mouse-y", `${y}px`);
+  };
+
   return (
-    <main className="relative w-full min-h-screen bg-[#050505] p-6 selection:bg-[#facc15] selection:text-black pb-24">
-      {/* Background Grid Pattern */}
+    <main 
+      onMouseMove={handleMouseMoveMain}
+      className="relative w-full min-h-screen bg-[#050505] p-6 selection:bg-[#facc15] selection:text-black pb-24"
+    >
+      {/* Dynamic Sonar Background Grid Pattern */}
       <div 
-        className="absolute inset-0 z-0 pointer-events-none opacity-20"
+        className="absolute inset-0 z-0 pointer-events-none opacity-60"
         style={{
           backgroundImage: "linear-gradient(to right, #27272a 1px, transparent 1px), linear-gradient(to bottom, #27272a 1px, transparent 1px)",
-          backgroundSize: "4rem 4rem"
+          backgroundSize: "4rem 4rem",
+          maskImage: "radial-gradient(circle 350px at var(--mouse-x, 50%) var(--mouse-y, 50%), black 0%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(circle 350px at var(--mouse-x, 50%) var(--mouse-y, 50%), black 0%, transparent 100%)"
         }}
       />
 
@@ -80,12 +117,23 @@ export default function BatcomputerMainframe() {
           <div className="bg-black/60 backdrop-blur-md border border-white/10 p-6 rounded-2xl flex-1 flex flex-col shadow-[0_0_30px_rgba(0,0,0,0.8)] overflow-hidden">
             <h3 className="text-[#facc15] font-oswald text-lg uppercase tracking-widest mb-4">Live GCPD Scanner</h3>
             <div className="flex-1 space-y-3 font-mono text-xs text-green-500/80">
-              <div className="border-b border-green-500/10 pb-2 break-words">[10:41] 10-31 Crime in Progress: Crime Alley</div>
-              <div className="border-b border-green-500/10 pb-2 break-words text-white/50">[10:42] Arkham Asylum cell block B secure</div>
-              <div className="border-b border-green-500/10 pb-2 break-words text-yellow-500/80">[10:45] Unidentified vigilante spotted near Clock Tower</div>
-              <div className="border-b border-green-500/10 pb-2 break-words text-red-500/80">[10:47] Signal intercepted: Joker toxin signature detected</div>
-              <div className="border-b border-green-500/10 pb-2 break-words">[10:51] WayneTech satellite repositioning...</div>
-              <div className="border-b border-green-500/10 pb-2 break-words flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> [11:04] Bat-Signal lit.</div>
+              {[
+                "[10:41] 10-31 Crime in Progress: Crime Alley",
+                "[10:42] Arkham Asylum cell block B secure",
+                "[10:45] Unidentified vigilante spotted near Clock Tower",
+                "[10:47] Signal intercepted: Joker toxin signature detected",
+                "[10:51] WayneTech satellite repositioning...",
+                "[11:04] Bat-Signal lit."
+              ].map((log, i) => (
+                <div 
+                  key={i} 
+                  ref={el => { scannerLinesRef.current[i] = el; }}
+                  className={`border-b border-green-500/10 pb-2 break-words opacity-0 ${log.includes("Joker") ? "text-red-500/80" : ""} ${log.includes("vigilante") ? "text-yellow-500/80" : ""}`}
+                >
+                  {log.includes("Bat-Signal") ? <div className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse mr-2"></div> : null}
+                  {log}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -147,7 +195,7 @@ export default function BatcomputerMainframe() {
               <Link 
                 href={`/batcomputer/movie/${movie.id}`}
                 key={movie.id}
-                onMouseEnter={handleMouseEnter}
+                onMouseEnter={(e) => handleMouseEnter(e, movie.title)}
                 onMouseLeave={handleMouseLeave}
                 className="group relative block bg-white/5 border border-white/10 rounded-xl p-5 hover:border-[#facc15]/50 hover:bg-[#27272a]/60 transition-all duration-300 cursor-none"
               >

@@ -75,7 +75,7 @@ export default function Home() {
               I AM THE<br /><span className="text-[#facc15]">NIGHT.</span>
             </h1>
             <p className="fade-up text-xl text-neutral-400 font-medium max-w-xl leading-relaxed">
-              Accessing Wayne Enterprises Mainframe... Cryptographic handshake verified. Engage the Batcomputer tactical database to review the Dark Knight's arsenal, allies, and highest-priority targets.
+              Accessing Wayne Enterprises Mainframe... Cryptographic handshake verified. Engage the Batcomputer tactical database to review the Dark Knight&apos;s arsenal, allies, and highest-priority targets.
             </p>
             <button 
               onClick={(e) => {
@@ -113,7 +113,7 @@ export default function Home() {
             </h2>
             <div className="w-24 h-1 bg-[#facc15] mt-8 mb-6"></div>
             <p className="text-xl text-neutral-400">
-              Wayne Enterprises classified R&D. Military-grade combat technology repurposed for Gotham's shadows.
+              Wayne Enterprises classified R&D. Military-grade combat technology repurposed for Gotham&apos;s shadows.
             </p>
           </div>
 
