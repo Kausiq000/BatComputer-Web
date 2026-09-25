@@ -1,11 +1,25 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import dynamic from "next/dynamic";
 import gsap from "gsap";
 import Link from "next/link";
-import BatmanCanvas2 from "@/components/Batmancanvas2";
 import CustomCursor from "@/components/CustomCursor";
 import { cinematicArchives } from "@/lib/movieData";
+
+const BatmanCanvas2 = dynamic(() => import("@/components/Batmancanvas2"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full absolute inset-0 z-0 flex items-center justify-center">
+      <div 
+        className="flex items-center justify-center text-[#facc15] text-xl font-bold tracking-widest animate-pulse whitespace-nowrap" 
+        style={{ fontFamily: "var(--font-oswald)" }}
+      >
+        LOADING TACTICAL SUIT SCHEMATIC...
+      </div>
+    </div>
+  ),
+});
 
 export default function BatcomputerMainframe() {
   const [activeSchematic, setActiveSchematic] = useState<string | null>(null);
@@ -73,6 +87,7 @@ export default function BatcomputerMainframe() {
       {/* Dynamic Sonar Background Grid Pattern */}
       <div 
         className="absolute inset-0 z-0 pointer-events-none opacity-60"
+        aria-hidden="true"
         style={{
           backgroundImage: "linear-gradient(to right, #27272a 1px, transparent 1px), linear-gradient(to bottom, #27272a 1px, transparent 1px)",
           backgroundSize: "4rem 4rem",
@@ -84,12 +99,12 @@ export default function BatcomputerMainframe() {
       <div className="relative z-10 w-full min-h-[90vh] grid grid-cols-12 gap-6">
         
         {/* Left Layer (Cols 1-3): Threat Radar & Live Scanner */}
-        <div ref={leftPanelRef} className="col-span-12 md:col-span-3 flex flex-col gap-6 h-full">
+        <section aria-label="Tactical Radar and GCPD Scanner" ref={leftPanelRef} className="col-span-12 md:col-span-3 flex flex-col gap-6 h-full">
           
           {/* Threat Radar */}
           <div className="bg-black/60 backdrop-blur-md border border-white/10 p-6 rounded-2xl flex flex-col items-center shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-            <h3 className="text-[#facc15] font-oswald text-lg uppercase tracking-widest w-full text-left mb-6">Gotham Threat Level</h3>
-            <div className="relative w-48 h-48 rounded-full border border-white/20 bg-black/40 overflow-hidden flex items-center justify-center">
+            <h2 className="text-[#facc15] font-oswald text-lg uppercase tracking-widest w-full text-left mb-6">Gotham Threat Level</h2>
+            <div className="relative w-48 h-48 rounded-full border border-white/20 bg-black/40 overflow-hidden flex items-center justify-center" aria-hidden="true">
               {/* Radar Grid */}
               <div className="absolute inset-0 rounded-full border-2 border-green-500/20 m-4"></div>
               <div className="absolute inset-0 rounded-full border-2 border-green-500/20 m-10"></div>
@@ -115,8 +130,8 @@ export default function BatcomputerMainframe() {
 
           {/* Static GCPD Scanner Showpiece */}
           <div className="bg-black/60 backdrop-blur-md border border-white/10 p-6 rounded-2xl flex-1 flex flex-col shadow-[0_0_30px_rgba(0,0,0,0.8)] overflow-hidden">
-            <h3 className="text-[#facc15] font-oswald text-lg uppercase tracking-widest mb-4">Live GCPD Scanner</h3>
-            <div className="flex-1 space-y-3 font-mono text-xs text-green-500/80">
+            <h2 className="text-[#facc15] font-oswald text-lg uppercase tracking-widest mb-4">Live GCPD Scanner</h2>
+            <div role="log" aria-live="polite" className="flex-1 space-y-3 font-mono text-xs text-green-500/80">
               {[
                 "[10:41] 10-31 Crime in Progress: Crime Alley",
                 "[10:42] Arkham Asylum cell block B secure",
@@ -130,16 +145,16 @@ export default function BatcomputerMainframe() {
                   ref={el => { scannerLinesRef.current[i] = el; }}
                   className={`border-b border-green-500/10 pb-2 break-words opacity-0 ${log.includes("Joker") ? "text-red-500/80" : ""} ${log.includes("vigilante") ? "text-yellow-500/80" : ""}`}
                 >
-                  {log.includes("Bat-Signal") ? <div className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse mr-2"></div> : null}
+                  {log.includes("Bat-Signal") ? <div className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse mr-2" aria-hidden="true"></div> : null}
                   {log}
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Center Layer (Cols 4-9): 3D Model & Specs */}
-        <div ref={centerPanelRef} className="col-span-12 md:col-span-6 relative rounded-2xl border border-white/10 bg-gradient-to-t from-[#050505] via-transparent to-[#050505] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] min-h-[600px]">
+        <section aria-label="Tactical Suit Interactive Schematic" ref={centerPanelRef} className="col-span-12 md:col-span-6 relative rounded-2xl border border-white/10 bg-gradient-to-t from-[#050505] via-transparent to-[#050505] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] min-h-[600px]">
           
           {/* High Performance Canvas 2 */}
           <BatmanCanvas2 />
@@ -147,7 +162,7 @@ export default function BatcomputerMainframe() {
           {/* Center UI Overlay */}
           <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-8">
             <div className="flex justify-between w-full">
-              <div className="text-white/30 font-oswald text-sm tracking-[0.4em]">WAYNE SECURE NODE</div>
+              <h1 className="text-white/30 font-oswald text-sm tracking-[0.4em] uppercase">WAYNE SECURE NODE // TACTICAL MAINFRAME</h1>
               <div className="text-white/30 font-oswald text-sm tracking-[0.4em]">ID: 849-B</div>
             </div>
             
@@ -155,7 +170,7 @@ export default function BatcomputerMainframe() {
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[80%] max-w-md h-32 pointer-events-auto">
               {activeSchematic ? (
                 <div className="w-full h-full bg-black/60 backdrop-blur-xl border border-[#facc15]/40 rounded-xl p-6 flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-300">
-                  <h4 className="text-[#facc15] font-oswald text-xl uppercase tracking-wider mb-2">{activeSchematic}</h4>
+                  <h3 className="text-[#facc15] font-oswald text-xl uppercase tracking-wider mb-2">{activeSchematic}</h3>
                   <p className="text-neutral-300 font-inter text-sm leading-relaxed">
                     {activeSchematic === "Nomex Survival Suit" && "Kevlar bi-weave. Impact resistant. Flame retardant."}
                     {activeSchematic === "Chest Vector Plate" && "Titanium-dipped plate. Designed to draw fire to the most heavily armored point."}
@@ -170,31 +185,38 @@ export default function BatcomputerMainframe() {
             </div>
           </div>
 
-          {/* Hotspots mapped to the massive scaled model */}
+          {/* Hotspots mapped to the massive scaled model with accessible labels */}
           <button 
+            type="button"
+            aria-label="Inspect Chest Vector Plate schematic"
             onClick={() => setActiveSchematic("Chest Vector Plate")}
             className="absolute top-[35%] left-1/2 -translate-x-1/2 w-6 h-6 rounded-full border-2 border-[#facc15] bg-[#facc15]/20 animate-pulse hover:bg-[#facc15] hover:scale-125 transition-all z-20 pointer-events-auto shadow-[0_0_15px_#facc15]"
           />
           <button 
+            type="button"
+            aria-label="Inspect Utility Belt schematic"
             onClick={() => setActiveSchematic("Utility Belt")}
             className="absolute top-[50%] left-1/2 -translate-x-1/2 w-6 h-6 rounded-full border-2 border-[#facc15] bg-[#facc15]/20 animate-pulse hover:bg-[#facc15] hover:scale-125 transition-all z-20 pointer-events-auto shadow-[0_0_15px_#facc15]"
           />
           <button 
+            type="button"
+            aria-label="Inspect Nomex Survival Suit schematic"
             onClick={() => setActiveSchematic("Nomex Survival Suit")}
             className="absolute top-[45%] left-[35%] w-6 h-6 rounded-full border-2 border-[#facc15] bg-[#facc15]/20 animate-pulse hover:bg-[#facc15] hover:scale-125 transition-all z-20 pointer-events-auto shadow-[0_0_15px_#facc15]"
           />
 
-        </div>
+        </section>
 
         {/* Right Layer (Cols 10-12): Cinematic Archives */}
-        <div ref={rightPanelRef} className="col-span-12 md:col-span-3 h-full flex flex-col bg-black/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-          <h3 className="text-[#facc15] font-oswald text-lg uppercase tracking-widest mb-6">Cinematic Archives</h3>
+        <section aria-label="Cinematic Mission Archives" ref={rightPanelRef} className="col-span-12 md:col-span-3 h-full flex flex-col bg-black/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+          <h2 className="text-[#facc15] font-oswald text-lg uppercase tracking-widest mb-6">Cinematic Archives</h2>
           
           <div className="flex-1 overflow-y-auto pr-2 space-y-4 scrollbar-hide">
             {cinematicArchives.map((movie) => (
               <Link 
                 href={`/batcomputer/movie/${movie.id}`}
                 key={movie.id}
+                aria-label={`Open classified mission file for ${movie.title} (${movie.year})`}
                 onMouseEnter={(e) => handleMouseEnter(e, movie.title)}
                 onMouseLeave={handleMouseLeave}
                 className="group relative block bg-white/5 border border-white/10 rounded-xl p-5 hover:border-[#facc15]/50 hover:bg-[#27272a]/60 transition-all duration-300 cursor-none"
@@ -202,16 +224,16 @@ export default function BatcomputerMainframe() {
                 <div className="absolute top-0 right-0 p-3 flex flex-col items-end opacity-50 group-hover:opacity-100 transition-opacity">
                   <span className="text-xs font-oswald text-white/50 tracking-widest leading-none">MK-{movie.year}</span>
                 </div>
-                <h4 className="text-white font-oswald text-xl uppercase tracking-wider mb-2 group-hover:text-[#facc15] group-hover:drop-shadow-[0_0_10px_rgba(250,204,21,0.5)] transition-colors">
+                <h3 className="text-white font-oswald text-xl uppercase tracking-wider mb-2 group-hover:text-[#facc15] group-hover:drop-shadow-[0_0_10px_rgba(250,204,21,0.5)] transition-colors">
                   {movie.title}
-                </h4>
+                </h3>
                 <p className="text-neutral-400 font-inter text-xs leading-relaxed group-hover:text-neutral-300 line-clamp-3">
                   {movie.synopsis}
                 </p>
               </Link>
             ))}
           </div>
-        </div>
+        </section>
 
       </div>
 

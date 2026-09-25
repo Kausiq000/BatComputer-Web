@@ -11,6 +11,7 @@ function BatmanModel() {
     const modelRef = useRef<THREE.Group>(null);
 
     useFrame((state, delta) => {
+        if (typeof document !== "undefined" && document.hidden) return;
         if (modelRef.current) {
             modelRef.current.rotation.y += delta * 0.2;
         }
@@ -23,8 +24,16 @@ function BatmanModel() {
 // 2. This is the main Canvas wrapper we export to the page
 export default function BatmanCanvas() {
     return (
-        <div className="w-full h-screen absolute inset-0 z-0 pointer-events-none">
-            <Canvas camera={{ position: [0, 0, 15], fov: 45 }}>
+        <div 
+            className="w-full h-screen absolute inset-0 z-0 pointer-events-none"
+            role="region"
+            aria-label="3D Interactive Batman Model"
+        >
+            <Canvas 
+                camera={{ position: [0, 0, 15], fov: 45 }}
+                dpr={[1, 1.5]}
+                gl={{ powerPreference: "high-performance" }}
+            >
                 <Suspense fallback={
                     <Html center position={[1.5, 0, 0]}>
                         <div className="flex items-center justify-center text-yellow-500 text-2xl md:text-3xl font-black tracking-widest animate-pulse z-0 whitespace-nowrap pl-10 md:pl-40" style={{ fontFamily: "var(--font-oswald)" }}>

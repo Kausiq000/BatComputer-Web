@@ -12,6 +12,7 @@ function BatmanModel2() {
     const modelRef = useRef<THREE.Group>(null);
 
     useFrame((state, delta) => {
+        if (typeof document !== "undefined" && document.hidden) return;
         if (modelRef.current) {
             // Optional slow rotation
             modelRef.current.rotation.y += delta * 0.1;
@@ -25,7 +26,11 @@ function BatmanModel2() {
 // 2. High-Performance Canvas Wrapper
 export default function BatmanCanvas2() {
     return (
-        <div className="w-full h-full absolute inset-0 z-0">
+        <div 
+            className="w-full h-full absolute inset-0 z-0"
+            role="region"
+            aria-label="3D Tactical Suit Schematic Model"
+        >
             {/* CRITICAL 60FPS FIX: dpr and gl settings */}
             <Canvas 
                 camera={{ position: [0, 0, 10], fov: 45 }}

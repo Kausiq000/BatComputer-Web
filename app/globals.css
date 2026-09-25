@@ -5,17 +5,21 @@
   --color-foreground: #ededed;
   --color-wayne-yellow: #facc15;
   --color-wayne-graphite: #27272a;
-  --font-space: "Space Grotesk", sans-serif;
-  --font-inter: "Inter", sans-serif;
+  --font-space: var(--font-space), "Space Grotesk", sans-serif;
+  --font-inter: var(--font-inter), "Inter", sans-serif;
+  --font-oswald: var(--font-oswald), "Oswald", sans-serif;
 }
 
 :root {
   --background: var(--color-background);
   --foreground: var(--color-foreground);
+  --font-oswald: "Oswald", sans-serif;
 }
 
-* {
-  cursor: none !important;
+@media (hover: hover) and (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
 }
 
 body {

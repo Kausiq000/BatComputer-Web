@@ -55,16 +55,31 @@ export default function LoreArchives() {
   };
 
   return (
-    <div id="archives-section" ref={containerRef} className="relative z-10 w-full h-screen bg-transparent flex flex-col md:flex-row items-center border-t border-white/5">
+    <section 
+      id="archives-section" 
+      ref={containerRef} 
+      aria-label="Batcomputer Tactical Archives"
+      className="relative z-10 w-full h-screen bg-transparent flex flex-col md:flex-row items-center border-t border-white/5"
+    >
       {/* Left Panel (30% on Desktop, 50% on Mobile) */}
-      <div className="w-full md:w-[30%] h-[40vh] md:h-screen flex flex-col justify-center px-8 md:px-12 gap-4 md:gap-8 bg-black/80 border-b md:border-b-0 md:border-r border-white/5 backdrop-blur-md z-20">
+      <div 
+        className="w-full md:w-[30%] h-[40vh] md:h-screen flex flex-col justify-center px-8 md:px-12 gap-4 md:gap-8 bg-black/80 border-b md:border-b-0 md:border-r border-white/5 backdrop-blur-md z-20"
+      >
         <h2 className="text-[#facc15] font-oswald text-xl uppercase tracking-[0.3em] mb-4">Batcomputer Archives</h2>
-        <div className="flex flex-col gap-6 items-start">
+        <div 
+          role="tablist"
+          aria-label="Personnel and Rogues Archive Tabs"
+          className="flex flex-col gap-6 items-start"
+        >
           {archiveEntries.map((entry) => {
             const isActive = activeEntry.id === entry.id;
             return (
               <button
                 key={entry.id}
+                id={`archive-tab-${entry.id}`}
+                role="tab"
+                aria-selected={isActive}
+                aria-controls="lore-details-panel"
                 onClick={() => {
                    if (isAnimating || entry.id === activeEntry.id) return;
                    setIsAnimating(true);
@@ -92,6 +107,8 @@ export default function LoreArchives() {
           ref={oldImgRef}
           src={prevEntry.image}
           alt={prevEntry.name}
+          decoding="async"
+          loading="lazy"
           className="absolute inset-0 w-full h-full object-cover z-0 opacity-50"
         />
 
@@ -99,21 +116,28 @@ export default function LoreArchives() {
           ref={newImgRef}
           src={activeEntry.image}
           alt={activeEntry.name}
+          decoding="async"
+          loading="lazy"
           className="absolute inset-0 w-full h-full object-cover z-0 opacity-50"
         />
 
         {/* The Lore Box Layer on Top */}
-        <div className="relative z-10 p-8 mt-auto flex flex-col justify-end h-full bg-gradient-to-t from-black via-black/80 to-transparent">
+        <div 
+          id="lore-details-panel"
+          role="tabpanel"
+          aria-labelledby={`archive-tab-${activeEntry.id}`}
+          className="relative z-10 p-8 mt-auto flex flex-col justify-end h-full bg-gradient-to-t from-black via-black/80 to-transparent"
+        >
           <div className="lore-stagger mt-auto max-w-2xl bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-10 shadow-2xl">
-          <h3 className="text-yellow-500 text-4xl lg:text-6xl font-black uppercase font-oswald mb-6 tracking-wide drop-shadow-lg">
-            {activeEntry.classification}
-          </h3>
-          <p className="text-zinc-300 text-xl md:text-2xl leading-relaxed font-inter font-medium">
-            {activeEntry.bio}
-          </p>
+            <h3 className="text-yellow-500 text-4xl lg:text-6xl font-black uppercase font-oswald mb-6 tracking-wide drop-shadow-lg">
+              {activeEntry.classification}
+            </h3>
+            <p className="text-zinc-300 text-xl md:text-2xl leading-relaxed font-inter font-medium">
+              {activeEntry.bio}
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

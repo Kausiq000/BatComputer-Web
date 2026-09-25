@@ -1,15 +1,28 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { Power, Crosshair, Wind, Eye } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import BatmanCanvas from "@/components/Batmancanvas";
 import LoreArchives from "@/components/LoreArchives";
 import CustomCursor from "@/components/CustomCursor";
+
+const BatmanCanvas = dynamic(() => import("@/components/Batmancanvas"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-screen absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
+      <div 
+        className="text-yellow-500 text-2xl md:text-3xl font-black tracking-widest animate-pulse z-0 whitespace-nowrap pl-10 md:pl-40" 
+        style={{ fontFamily: "var(--font-oswald)" }}
+      >
+        BATCOMPUTER INITIATED...
+      </div>
+    </div>
+  ),
+});
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -59,25 +72,24 @@ export default function Home() {
       {/* Layer 2: The Interactive UI Overlay */}
       <div className="relative z-10 w-full flex flex-col pt-32">
 
-        {/* Nav: Removed per user request */}
-
         {/* Hero Section */}
-        <section className="min-h-screen px-8 md:px-24 flex items-center pb-32 pt-20">
+        <section aria-label="Hero Introduction" className="min-h-screen px-8 md:px-24 flex items-center pb-32 pt-20">
           <div className="max-w-3xl flex flex-col items-start gap-8">
-            {/* The Batman Logo Title */}
+            {/* The Batman Logo Title & Headline in unified semantic hierarchy */}
             <div className="fade-up">
-              <h2 className="text-4xl md:text-6xl font-black tracking-[0.3em] text-[#facc15] uppercase drop-shadow-[0_0_20px_rgba(250,204,21,0.3)]" style={{ fontFamily: "var(--font-oswald)" }}>
+              <span className="block text-4xl md:text-6xl font-black tracking-[0.3em] text-[#facc15] uppercase drop-shadow-[0_0_20px_rgba(250,204,21,0.3)] font-oswald">
                 THE BATMAN
-              </h2>
+              </span>
             </div>
             
-            <h1 className="fade-up text-6xl md:text-8xl font-black tracking-tighter text-[#ededed] uppercase leading-[0.9]" style={{ fontFamily: "var(--font-oswald)", letterSpacing: "-0.02em" }}>
+            <h1 className="fade-up text-6xl md:text-8xl font-black tracking-tighter text-[#ededed] uppercase leading-[0.9] font-oswald" style={{ letterSpacing: "-0.02em" }}>
               I AM THE<br /><span className="text-[#facc15]">NIGHT.</span>
             </h1>
             <p className="fade-up text-xl text-neutral-400 font-medium max-w-xl leading-relaxed">
               Accessing Wayne Enterprises Mainframe... Cryptographic handshake verified. Engage the Batcomputer tactical database to review the Dark Knight&apos;s arsenal, allies, and highest-priority targets.
             </p>
             <button 
+              aria-label="Initialize Batcomputer tactical database"
               onClick={(e) => {
                 // Change text and flash
                 setBtnText("DECRYPTING WAYNE SECURE NODE...");
@@ -96,7 +108,7 @@ export default function Home() {
               }}
               className="fade-up mt-8 flex items-center gap-4 bg-[#facc15] text-black px-8 py-5 rounded-sm font-bold uppercase tracking-wider transition-colors shadow-[0_0_40px_rgba(250,204,21,0.2)] hover:shadow-[0_0_60px_rgba(250,204,21,0.4)]"
             >
-              <Power className="w-5 h-5 animate-pulse" />
+              <Power className="w-5 h-5 animate-pulse" aria-hidden="true" />
               {btnText}
             </button>
           </div>
@@ -106,12 +118,12 @@ export default function Home() {
         <LoreArchives />
 
         {/* The Arsenal (Features) */}
-        <section id="arsenal-section" className="min-h-screen px-8 md:px-24 py-32 flex flex-col justify-center border-t border-white/5 bg-gradient-to-b from-transparent to-black/80">
+        <section id="arsenal-section" aria-labelledby="arsenal-title" className="min-h-screen px-8 md:px-24 py-32 flex flex-col justify-center border-t border-white/5 bg-gradient-to-b from-transparent to-black/80">
           <div className="max-w-xl mb-20 fade-up">
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-[#ededed] uppercase" style={{ fontFamily: "var(--font-oswald)" }}>
+            <h2 id="arsenal-title" className="text-5xl md:text-7xl font-bold tracking-tight text-[#ededed] uppercase font-oswald">
               The Arsenal
             </h2>
-            <div className="w-24 h-1 bg-[#facc15] mt-8 mb-6"></div>
+            <div className="w-24 h-1 bg-[#facc15] mt-8 mb-6" aria-hidden="true"></div>
             <p className="text-xl text-neutral-400">
               Wayne Enterprises classified R&D. Military-grade combat technology repurposed for Gotham&apos;s shadows.
             </p>
@@ -121,7 +133,7 @@ export default function Home() {
             {/* Card 1 */}
             <div className="arsenal-card backdrop-blur-md bg-black/40 border border-white/10 p-10 rounded-2xl hover:border-[#facc15]/30 hover:bg-[#27272a]/40 transition-all duration-500 group">
               <div className="bg-[#27272a] w-16 h-16 rounded-xl flex items-center justify-center mb-8 group-hover:bg-[#facc15] transition-colors duration-500">
-                <Crosshair className="w-8 h-8 text-[#ededed] group-hover:text-black transition-colors duration-500" />
+                <Crosshair className="w-8 h-8 text-[#ededed] group-hover:text-black transition-colors duration-500" aria-hidden="true" />
               </div>
               <h3 className="text-2xl font-bold text-[#ededed] mb-4 font-oswald">Grapple Gun</h3>
               <p className="text-neutral-400 leading-relaxed font-inter">High-tensile ascension protocol using magnetic pneumatic firing. Tested to support 400lbs of dynamic load for urban traversal.</p>
@@ -130,7 +142,7 @@ export default function Home() {
             {/* Card 2 */}
             <div className="arsenal-card backdrop-blur-md bg-black/40 border border-white/10 p-10 rounded-2xl hover:border-[#facc15]/30 hover:bg-[#27272a]/40 transition-all duration-500 group">
               <div className="bg-[#27272a] w-16 h-16 rounded-xl flex items-center justify-center mb-8 group-hover:bg-[#facc15] transition-colors duration-500">
-                <Wind className="w-8 h-8 text-[#ededed] group-hover:text-black transition-colors duration-500" />
+                <Wind className="w-8 h-8 text-[#ededed] group-hover:text-black transition-colors duration-500" aria-hidden="true" />
               </div>
               <h3 className="text-2xl font-bold text-[#ededed] mb-4 font-oswald">Batarangs</h3>
               <p className="text-neutral-400 leading-relaxed font-inter">Precision crowd control. Programmable flight path and detonation delay.</p>
@@ -139,7 +151,7 @@ export default function Home() {
             {/* Card 3 */}
             <div className="arsenal-card backdrop-blur-md bg-black/40 border border-white/10 p-10 rounded-2xl hover:border-[#facc15]/30 hover:bg-[#27272a]/40 transition-all duration-500 group">
               <div className="bg-[#27272a] w-16 h-16 rounded-xl flex items-center justify-center mb-8 group-hover:bg-[#facc15] transition-colors duration-500">
-                <Eye className="w-8 h-8 text-[#ededed] group-hover:text-black transition-colors duration-500" />
+                <Eye className="w-8 h-8 text-[#ededed] group-hover:text-black transition-colors duration-500" aria-hidden="true" />
               </div>
               <h3 className="text-2xl font-bold text-[#ededed] mb-4 font-oswald">Sonar Vision</h3>
               <p className="text-neutral-400 leading-relaxed font-inter">Echolocation mapping active. Real-time tactical threat assessment.</p>

@@ -23,6 +23,8 @@ export default function MovieDetail() {
   useEffect(() => {
     if (!movie) return;
     
+    document.title = `${movie.title} (${movie.year}) // Batcomputer Archives`;
+
     const ctx = gsap.context(() => {
       // Background slow zoom with improved opacity
       gsap.fromTo(bgRef.current, { scale: 1.1, opacity: 0 }, { scale: 1, opacity: 0.6, duration: 2, ease: "power2.out" });
@@ -63,22 +65,24 @@ export default function MovieDetail() {
         ref={bgRef}
         className="fixed inset-0 z-0 bg-contain bg-top mt-12 bg-no-repeat"
         style={{ backgroundImage: `url('${getBackdrop()}')` }}
+        aria-hidden="true"
       />
 
       {/* Heavy Cinematic Gradient Overlay so text isn't overpowered */}
-      <div className="fixed inset-0 z-10 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+      <div className="fixed inset-0 z-10 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" aria-hidden="true" />
 
       {/* Content Layer */}
       <div className="relative z-20 min-h-screen p-8 md:p-24 flex flex-col justify-end">
         
         {/* Back Button */}
         <button 
+          aria-label="Return to Batcomputer Mainframe"
           onClick={() => {
             gsap.to(containerRef.current, { opacity: 0, duration: 0.5, onComplete: () => router.back() });
           }}
           className="absolute top-12 left-12 flex items-center gap-2 text-neutral-400 hover:text-[#facc15] transition-colors font-oswald tracking-widest uppercase text-sm border border-white/10 hover:border-[#facc15]/50 px-6 py-3 rounded-full cursor-none z-50 group hover:bg-[#27272a]/60 backdrop-blur-md"
         >
-           <span className="group-hover:-translate-x-1 transition-transform">←</span> ACCESS MAINFRAME
+           <span className="group-hover:-translate-x-1 transition-transform" aria-hidden="true">←</span> ACCESS MAINFRAME
         </button>
 
         {/* Text Container */}

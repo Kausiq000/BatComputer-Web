@@ -41,6 +41,7 @@ export default function LoginLamp() {
 
   // Initial setup
   useEffect(() => {
+    document.title = "Wayne Security Login Lamp // Batcomputer";
     gsap.set(formRef.current, { opacity: 0.1, y: 20 });
     gsap.set(lightBeamRef.current, { opacity: 0 });
     gsap.set(bgRef.current, { backgroundColor: "#0a0a0c" });
@@ -63,6 +64,7 @@ export default function LoginLamp() {
           <div 
             ref={lightBeamRef}
             className="absolute top-[80px] w-[300px] h-[400px] pointer-events-none"
+            aria-hidden="true"
             style={{
               background: "linear-gradient(to bottom, rgba(255, 250, 220, 0.4) 0%, rgba(255, 250, 220, 0) 100%)",
               clipPath: "polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)",
@@ -82,8 +84,17 @@ export default function LoginLamp() {
           {/* Interactive Pull String */}
           <div 
             ref={stringRef}
+            role="button"
+            tabIndex={0}
+            aria-label={isOn ? "Turn lamp off" : "Turn lamp on"}
             onClick={toggleLamp}
-            className="absolute top-[96px] right-[48px] z-10 cursor-pointer flex flex-col items-center group pointer-events-auto"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                toggleLamp();
+              }
+            }}
+            className="absolute top-[96px] right-[48px] z-10 cursor-pointer flex flex-col items-center group pointer-events-auto focus:outline-none"
             style={{ paddingBottom: '20px' }} 
           >
             {/* The literal string */}
@@ -101,10 +112,13 @@ export default function LoginLamp() {
         >
           <h2 className="text-white text-3xl font-bold mb-8 font-inter">Welcome</h2>
           
-          <div className="space-y-6">
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-sm text-neutral-400 font-medium ml-1">Username</label>
+              <label htmlFor="username-input" className="text-sm text-neutral-400 font-medium ml-1">Username</label>
               <input 
+                id="username-input"
+                name="username"
+                autoComplete="username"
                 type="text" 
                 placeholder="batman_returns"
                 className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#facc15]/50 focus:bg-black/60 transition-all font-mono"
@@ -112,18 +126,24 @@ export default function LoginLamp() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm text-neutral-400 font-medium ml-1">Password</label>
+              <label htmlFor="password-input" className="text-sm text-neutral-400 font-medium ml-1">Password</label>
               <input 
+                id="password-input"
+                name="password"
+                autoComplete="current-password"
                 type="password" 
                 placeholder="••••••••"
                 className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#facc15]/50 focus:bg-black/60 transition-all font-mono"
               />
             </div>
             
-            <button className="w-full mt-4 bg-white text-black font-bold py-4 rounded-xl hover:bg-[#fffae6] hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95">
+            <button 
+              type="submit"
+              className="w-full mt-4 bg-white text-black font-bold py-4 rounded-xl hover:bg-[#fffae6] hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95"
+            >
               Sign In
             </button>
-          </div>
+          </form>
         </div>
 
       </div>
